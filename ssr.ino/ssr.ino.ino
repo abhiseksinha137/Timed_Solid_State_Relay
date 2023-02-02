@@ -1,19 +1,21 @@
 long current_time=0;
+
 struct SSR {
   int id;
   int status;   // 1 for on; 0 for off
   long timeSince_stateChanged;
   long on_time;
   long off_time;
+  int pin;
 };
 //long checkSwitch(SSR, long);
 SSR switch1,switch2,switch3;
 
 void setup() {
   // put your setup code here, to run once:
-  switch1={1,0,0,5000,10000}; 
-  switch2={2,0,0,5000,5000};  
-  switch3={3,1,0,1000,2000};
+  switch1={1,0,0,3000,1000,5}; 
+  switch2={2,0,0,1000,3000,6};  
+  
 Serial.begin(9600);
 }
 
@@ -41,6 +43,7 @@ long checkSwitch(SSR *sw, long current_time)
     if((current_time-sw->timeSince_stateChanged)>=sw->on_time)
     {
         // Turn off SSR
+        digitalWrite(sw->pin,HIGH);
         Serial.print("Turning Switch No. ");
         Serial.print(sw->id);
         Serial.print(" OFF at: ");
@@ -55,6 +58,7 @@ long checkSwitch(SSR *sw, long current_time)
       if((current_time-sw->timeSince_stateChanged)>=sw->off_time)
     {
         // Turn On SSR
+        digitalWrite(sw->pin,LOW);        
         Serial.print("Turning Switch No. ");
         Serial.print(sw->id);
         Serial.print(" ON at: ");
