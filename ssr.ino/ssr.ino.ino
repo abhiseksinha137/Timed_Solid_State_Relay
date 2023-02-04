@@ -12,12 +12,12 @@ struct SSR {
   int pin;
 };
 //long checkSwitch(SSR, long);
-SSR switch1,switch2;
+SSR switch1,switch2,switch3,switch4;
 
 void setup() {
   // put your setup code here, to run once:
   switch1={1,0,0,1000,1000,13}; //ID,initial_status, 0, on_time, off_time, pin
-  switch2={2,1,0,3000,2000,6};  
+  switch2={2,1,0,10,10,6};  
   
   pinMode(switch1.pin, OUTPUT);
   pinMode(switch2.pin, OUTPUT);
@@ -99,33 +99,71 @@ void setSwitch()
     else
     {
       int commaIndex  = readString.indexOf(',');
-
-
-      //  Search for the next comma just after the first
-      int secondCommaIndex = readString.indexOf(',', commaIndex + 1);
-      int thirdCommaIndex = readString.indexOf(',', commaIndex + 2);
-      int fourthCommaIndex = readString.indexOf(',', commaIndex + 3);
-      int fifthCommaIndex = readString.indexOf(',', commaIndex + 4);
-      //int sixthCommaIndex = readString.indexOf(',', commaIndex + 5);
-      //ID,initial_status, 0, on_time, off_time, pin
       String firstValue = readString.substring(0, commaIndex);
-      String secondValue = readString.substring(commaIndex+1, secondCommaIndex);
-      String thirdValue = readString.substring(secondCommaIndex+1, thirdCommaIndex);
-      String fourthValue = readString.substring(thirdCommaIndex+1, fourthCommaIndex);
-      String fifthValue = readString.substring(fourthCommaIndex+1, fifthCommaIndex);
-      String sixthValue = readString.substring(fifthCommaIndex+1);
+      readString=readString.substring(commaIndex+1);
+
+      
+      commaIndex  = readString.indexOf(',');
+      String secondValue = readString.substring(0, commaIndex);
+      readString=readString.substring(commaIndex+1);
+
+      commaIndex  = readString.indexOf(',');
+      String thirdValue = readString.substring(0, commaIndex);
+      readString=readString.substring(commaIndex+1);
+
+      commaIndex  = readString.indexOf(',');
+      String fourthValue = readString.substring(0, commaIndex);
+      readString=readString.substring(commaIndex+1);
+
+      commaIndex  = readString.indexOf(',');
+      String fifthValue = readString.substring(0, commaIndex);
+      readString=readString.substring(commaIndex+1);
+
+      //commaIndex  = readString.indexOf(',');
+      String sixthValue = readString;
+      
+
+     
      
       //ID,initial_status, 0, on_time, off_time, pin
       int ID=firstValue.toInt();
       int status=secondValue.toInt();
+      int timeSince_stateChanged=thirdValue.toInt();
       int on_time=fourthValue.toInt();
       int off_time=fifthValue.toInt();
       int pin=sixthValue.toInt();
-      Serial.println(ID);
-      Serial.println(status);
-      Serial.println(on_time);
-      Serial.println(off_time);
-      Serial.println(pin);
+      // Serial.println(ID);
+      // Serial.println(status);
+      // Serial.println(timeSince_stateChanged);
+      // Serial.println(on_time);
+      // Serial.println(off_time);
+      // Serial.println(pin);
+
+      SSR *sw;
+      switch (ID) 
+      {
+        case 1:
+          sw=&switch1;
+          break;
+        case 2:
+          sw=&switch2;
+          break;
+        case 3:
+          sw=&switch2;
+          break;
+        case 4:
+          sw=&switch4;
+          break;
+      }
+      //ID,initial_status, 0, on_time, off_time, pin
+      sw->id=ID;
+      sw->status=status;
+      sw->timeSince_stateChanged=timeSince_stateChanged;
+      sw->on_time=on_time;
+      sw->off_time=off_time;
+      sw->pin=pin;
+
     }
 
 }
+
